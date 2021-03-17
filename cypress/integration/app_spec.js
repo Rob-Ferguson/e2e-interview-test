@@ -2,6 +2,7 @@ describe('Todo', function () {
   let TODO_ITEM_ONE = 'buy some cheese'
   let TODO_ITEM_TWO = 'feed the cat'
   let TODO_ITEM_THREE = 'book a doctors appointment'
+  let TODO_ITEM_WHITESPACE = '    tons of whitespace    '
 
   beforeEach(function () {
     cy.visit('/')
@@ -32,6 +33,12 @@ describe('Todo', function () {
   context('New Todo', function () {
     it('should allow me to add todo items', function () {
       // TODO: create a test for adding a todo
+	  
+	  //Create a new to-do item and ensure it contains the proper text
+	  cy.createTodo(TODO_ITEM_ONE).should('have.text', TODO_ITEM_ONE)
+	  
+	  //Check that this new entry is reflected in the item count
+	  cy.get('.todo-count').contains('1 item left')
     })
 
     it('should clear text input field when an item is added', function () {
@@ -66,6 +73,10 @@ describe('Todo', function () {
     it('should trim text input', function () {
       // TODO: add a test for ensuring that whitespace is trimmed from the todo
       // input such that "  todo   " ends up being added as "todo".
+	  
+	  //Create the new list item and ensure the item text matches the trimmed version of the original input
+	  cy.createTodo(TODO_ITEM_WHITESPACE)
+	  .should('have.text', TODO_ITEM_WHITESPACE.trim())
     })
 
     it('should show #main and #footer when items added', function () {
@@ -137,15 +148,26 @@ describe('Todo', function () {
   })
 
   context('Item', function () {
+    //Create a couple default list items to mess with at the beginning of each test in this set
+	beforeEach(function () {
+	  cy.createTodo(TODO_ITEM_ONE).as('firstTodo')
+      cy.createTodo(TODO_ITEM_TWO).as('secondTodo')
+    })
 
     it('should allow me to mark items as complete', function () {
       // TODO: add a test to mark an item as completed
+
+	  //Find the first list item and mark it as complete
+      cy.get('@firstTodo')
+      .find('.toggle')
+      .check()
+
+	  //Check that first item is in a completed state (and that the second item hasn't changed)
+      cy.get('@firstTodo').should('have.class', 'completed')
+      cy.get('@secondTodo').should('not.have.class', 'completed')
     })
 
     it('should allow me to un-mark items as complete', function () {
-      cy.createTodo(TODO_ITEM_ONE).as('firstTodo')
-      cy.createTodo(TODO_ITEM_TWO).as('secondTodo')
-
       cy.get('@firstTodo')
       .find('.toggle')
       .check()
@@ -163,6 +185,17 @@ describe('Todo', function () {
 
     it('should allow me to edit an item', function () {
       // TODO: add a test ensure that you can edit an item
+	  
+	  //Double click the first item in the list to start editing
+	  cy.get('@firstTodo').find('label')
+	  .dblclick()
+	  
+	  //Clear out the original text from the focused element, replace message, and press enter to submit changes
+	  cy.focused().clear()
+      .type('this entry was edited{enter}')
+	  
+	  //Ensure the list item now contains the new text
+	  cy.get('@firstTodo').should('have.text', 'this entry was edited')
     })
   })
 
@@ -403,6 +436,25 @@ describe('Todo', function () {
 
     it('should allow me to display completed items', function () {
       // TODO: add a test to verify the completed items display
+	  
+	  //Mark the second list item as complete
+	  cy.get('@todos')
+      .eq(1)
+      .find('.toggle')
+      .check()
+
+	  //Click over to the Completed filter
+      cy.get('.filters')
+      .contains('Completed')
+      .click()
+
+      //Check that the first entry under the Completed filter is the correct item (TODO_ITEM_TWO)
+      cy.get('@todos')
+      .eq(0)
+      .should('contain', TODO_ITEM_TWO)
+	  
+	  //Make sure only the one completed item is shown in the list
+	  cy.get('@todos').should('have.length', 1)
     })
 
     it('should allow me to display all items', function () {
