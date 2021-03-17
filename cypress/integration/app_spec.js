@@ -1,8 +1,12 @@
 describe('Todo', function () {
-  let TODO_ITEM_ONE = 'buy some cheese'
-  let TODO_ITEM_TWO = 'feed the cat'
-  let TODO_ITEM_THREE = 'book a doctors appointment'
-  let TODO_ITEM_WHITESPACE = '    tons of whitespace    '
+  //let TODO_ITEM_ONE = 'buy some cheese'
+  //let TODO_ITEM_TWO = 'feed the cat'
+  //let TODO_ITEM_THREE = 'book a doctors appointment'
+  
+  let TODO_ITEM_ONE = 'stack sats'
+  let TODO_ITEM_TWO = 'take custody of UTXOs'
+  let TODO_ITEM_THREE = 'maximize sovereignty'
+  let TODO_ITEM_WHITESPACE = '    ₿    '
 
   beforeEach(function () {
     cy.visit('/')

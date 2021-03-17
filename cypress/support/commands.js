@@ -13,9 +13,13 @@
 
 Cypress.Commands.add('createDefaultTodos', function () {
 
-  let TODO_ITEM_ONE = 'buy some cheese'
-  let TODO_ITEM_TWO = 'feed the cat'
-  let TODO_ITEM_THREE = 'book a doctors appointment'
+  //let TODO_ITEM_ONE = 'buy some cheese'
+  //let TODO_ITEM_TWO = 'feed the cat'
+  //let TODO_ITEM_THREE = 'book a doctors appointment'
+  let TODO_ITEM_ONE = 'stack sats'
+  let TODO_ITEM_TWO = 'take custody of UTXOs'
+  let TODO_ITEM_THREE = 'maximize sovereignty'
+
 
   // begin the command here, which by will display
   // as a 'spinning blue state' in the UI to indicate
